@@ -1,4 +1,4 @@
-from fastapi import Body, FastAPI
+from fastapi import Body, FastAPI, Path,Query,HTTPException
 from validation import Book_Request
 
 app = FastAPI()
@@ -34,7 +34,7 @@ async def get_books():
     return BOOKS
 
 @app.get('/books/')
-async def get_books_by_rating(rating : int):
+async def get_books_by_rating(rating : int = Query(gt=0,lt=6)):
     book_ratings = []
     for book in BOOKS:
         if book.rating == rating:
@@ -43,13 +43,15 @@ async def get_books_by_rating(rating : int):
     return book_ratings
 
 @app.get('/books/{book_id}')
-async def get_books_by_id(book_id:int):
+async def get_books_by_id(book_id:int = Path(gt=0)):
     for book in BOOKS:
         if book.id == book_id:
             return book
+        
+    raise HTTPException(status_code=404,detail="Book not found")
 
 @app.get('/books/publish/{published_date}')
-async def get_books_by_published_date(published_date:int):
+async def get_books_by_published_date(published_date:int=Path(gt=1000,lt=2027)):
     books_by_date=[]
     for i in range(len(BOOKS)):
         if BOOKS[i].published_date == published_date:
@@ -70,22 +72,27 @@ async def create_book(new_book : Book_Request):
 
 @app.put('/books/update_book')
 async def update_book(book:Book_Request):
+    book_update=False
     for i in range(len(BOOKS)):
         if BOOKS[i].id == book.id:
             BOOKS[i] = Book(**book.model_dump())
             # book.dict()
-            return 200
-    return "No such values found"
+            # return 200
+            book_update=True
+
+    if not book_update:
+        raise HTTPException(status_code=404,detail="No book found")
+
 
 
 @app.delete('/books/delete_book')
-async def delete_book(book_id : int):
+async def delete_book(book_id :int=Query(gt=0)):
     for i in range(len(BOOKS)):
         if BOOKS[i].id == book_id:
             BOOKS.pop(i)
-            return
+            return f"Book successfully deleted with id -> {book_id}"
         
-    return "No such book with id found"
+    raise HTTPException(status_code=404,detail="No book found to delete with that id")
 
 def find_book_id(book:Book):
 
