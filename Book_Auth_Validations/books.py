@@ -1,5 +1,6 @@
 from fastapi import Body, FastAPI, Path,Query,HTTPException
 from validation import Book_Request
+from starlette import status
 
 app = FastAPI()
 
@@ -29,11 +30,11 @@ BOOKS = [
     Book(7,'Ed 3','Series book 3',3.4,False,2020),
 ]
 
-@app.get('/books')
+@app.get('/books',status_code=status.HTTP_200_OK)
 async def get_books():
     return BOOKS
 
-@app.get('/books/')
+@app.get('/books/',status_code=status.HTTP_200_OK)
 async def get_books_by_rating(rating : int = Query(gt=0,lt=6)):
     book_ratings = []
     for book in BOOKS:
@@ -42,7 +43,7 @@ async def get_books_by_rating(rating : int = Query(gt=0,lt=6)):
     
     return book_ratings
 
-@app.get('/books/{book_id}')
+@app.get('/books/{book_id}',status_code=status.HTTP_200_OK)
 async def get_books_by_id(book_id:int = Path(gt=0)):
     for book in BOOKS:
         if book.id == book_id:
@@ -50,7 +51,7 @@ async def get_books_by_id(book_id:int = Path(gt=0)):
         
     raise HTTPException(status_code=404,detail="Book not found")
 
-@app.get('/books/publish/{published_date}')
+@app.get('/books/publish/{published_date}',status_code=status.HTTP_200_OK)
 async def get_books_by_published_date(published_date:int=Path(gt=1000,lt=2027)):
     books_by_date=[]
     for i in range(len(BOOKS)):
@@ -62,7 +63,7 @@ async def get_books_by_published_date(published_date:int=Path(gt=1000,lt=2027)):
 # async def create_book(new_book = Body()):
 #     BOOKS.append(new_book)
 
-@app.post('/books/create_book')
+@app.post('/books/create_book',status_code=status.HTTP_201_CREATED)
 async def create_book(new_book : Book_Request):
     book = Book(**new_book.model_dump())
     #model_dump -> Make a json object validation to a dict , ** unpacks dict to pass as parameters Book(id=1,name='burger) 
@@ -70,7 +71,7 @@ async def create_book(new_book : Book_Request):
     BOOKS.append(find_book_id(book))
 
 
-@app.put('/books/update_book')
+@app.put('/books/update_book',status_code=status.HTTP_204_NO_CONTENT)
 async def update_book(book:Book_Request):
     book_update=False
     for i in range(len(BOOKS)):
@@ -85,7 +86,7 @@ async def update_book(book:Book_Request):
 
 
 
-@app.delete('/books/delete_book')
+@app.delete('/books/delete_book',status_code=status.HTTP_204_NO_CONTENT)
 async def delete_book(book_id :int=Query(gt=0)):
     for i in range(len(BOOKS)):
         if BOOKS[i].id == book_id:
