@@ -4,6 +4,6 @@ from sqlalchemy.ext.declarative import declarative_base
 
 SQL_ALCHEMY_DATABASE_URL = 'sqlite:///./todos.db'
 
-engine = create_engine(url=SQL_ALCHEMY_DATABASE_URL,connect_args={'check_same_thread':False})
-base = declarative_base()
-sessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine)
+Engine = create_engine(url=SQL_ALCHEMY_DATABASE_URL,connect_args={'check_same_thread':False})
+Base = declarative_base()
+SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=Engine)
