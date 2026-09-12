@@ -1,6 +1,6 @@
 from database import Base
-from sqlalchemy import Column ,String ,Boolean,Integer
-
+from sqlalchemy import Column ,String ,Boolean,Integer,ForeignKey
+#Data base shape should be in models.py , The api shape should be schema , Like book_request
 class Todos(Base):
     __tablename__ = 'todos'
 
@@ -9,3 +9,17 @@ class Todos(Base):
     description=Column(String)
     priority =Column(Integer)
     isCompleted = Column(Boolean , default=False)
+    Owner_id = Column(Integer , ForeignKey("users.id"))
+
+
+class Users(Base):
+    __tablename__ = 'users'
+    id = Column(Integer,primary_key=True, index=True)
+    email = Column(String,unique=True)
+    username = Column(String , unique=True)
+    first_name = Column(String)
+    last_name = Column(String)
+    hashed_password = Column(String)
+    is_active = Column(Boolean , default=True)
+    role = Column(String)
+    
