@@ -1,7 +1,26 @@
-from fastapi import APIRouter,HTTPException
+from fastapi import APIRouter,HTTPException,Depends
 from pydantic import BaseModel
 from models import Users
 from starlette import status
+from passlib.context import CryptContext
+from database import SessionLocal
+from typing import Annotated
+from sqlalchemy.orm import Session
+
+
+bcrypt_context = CryptContext(schemes=['bcrypt'] ,deprecated = 'auto')
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+db_dependency=Annotated[Session,Depends(get_db)]
+
+
 
 router = APIRouter(
 )
@@ -25,21 +44,24 @@ class User_Request(BaseModel):
 
 
 @router.post("/auth",status_code=status.HTTP_201_CREATED)
-async def create_user(user_request:User_Request):
+async def create_user(db : db_dependency ,user_request:User_Request):
     # user_request_model=Users(**user_request.model_dump())
     user_request_model = Users(
         email = user_request.email,
         username = user_request.username,
         first_name=user_request.first_name,
         last_name=user_request.last_name,
-        hashed_password=user_request.password,
+        hashed_password=bcrypt_context.hash(user_request.password),
         role=user_request.role,
         is_active= True
         )
-    if user_request_model is None:
-        raise HTTPException(status_code=500 , detail="Server cant process")
+    # if user_request_model is None:
+    #     raise HTTPException(status_code=500 , detail="Server cant process")
 
-    return user_request
+    db.add(user_request_model)
+    db.commit()
+
+    
 
     
 
