@@ -1,2 +1,6 @@
 pip install passlib
 pipl intall bcrypt == 4.0.1
+pip install python multiline
+JWT.io
+pip install "python-jose[cryptography]"
+python -c "import secrets; print(secrets.token_hex(32))"
