@@ -9,7 +9,7 @@ class Todos(Base):
     description=Column(String)
     priority =Column(Integer)
     isCompleted = Column(Boolean , default=False)
-    Owner_id = Column(Integer , ForeignKey("users.id"))
+    owner_id = Column(Integer , ForeignKey("users.id"))
 
 
 class Users(Base):
