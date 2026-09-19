@@ -59,7 +59,7 @@ async def get_current_user(token :Annotated[str , Depends(OAuth2_Bearer)]):
         if user_id is None or username is None:
             raise HTTPException(status_code= status.HTTP_401_UNAUTHORIZED , detail="Could not validate credentials")
 
-        return {'username':username ,'id':user_id ,'role': user_role}
+        return {'username':username ,'id':user_id ,'role':user_role}
     except JWTError:
         raise HTTPException(status_code= status.HTTP_401_UNAUTHORIZED , detail="Could not validate credentials")
     
