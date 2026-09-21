@@ -8,7 +8,7 @@ class Todos(Base):
     title = Column(String)
     description=Column(String)
     priority =Column(Integer)
-    isCompleted = Column(Boolean , default=False)
+    is_completed = Column(Boolean , default=False)
     owner_id = Column(Integer , ForeignKey("users.id"))
 
 

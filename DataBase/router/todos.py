@@ -63,7 +63,7 @@ async def update_todo(user :user_dependency , db:Db_dependency , todo_request : 
     todo_model.title = todo_request.title
     todo_model.description = todo_request.description
     todo_model.priority = todo_request.priority
-    todo_model.isCompleted = todo_request.isCompleted
+    todo_model.is_completed = todo_request.isCompleted
 
     db.add(todo_model)
     db.commit()

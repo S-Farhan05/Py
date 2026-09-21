@@ -47,7 +47,7 @@ async def get_user(db:db_dependency,user:user_dependency):
             "todo_title": todo.title,
              "description": todo.description,
              "priority_level": todo.priority,
-             "status_completed": todo.isCompleted,
+             "status_completed": todo.is_completed,
             }
             for todo in todo_model
                          ],}
