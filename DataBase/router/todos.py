@@ -22,7 +22,7 @@ class TodoRequest(BaseModel):
     title : str = Field(min_length=5)
     description : str = Field(min_length=10)
     priority : int =Field(gt=0,lt=6)
-    isCompleted : bool
+    is_completed  : bool
 
 
 @router.get("/", status_code=status.HTTP_200_OK)
@@ -63,7 +63,7 @@ async def update_todo(user :user_dependency , db:Db_dependency , todo_request : 
     todo_model.title = todo_request.title
     todo_model.description = todo_request.description
     todo_model.priority = todo_request.priority
-    todo_model.is_completed = todo_request.isCompleted
+    todo_model.is_completed = todo_request.is_completed
 
     db.add(todo_model)
     db.commit()
