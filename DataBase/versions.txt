@@ -7,3 +7,4 @@ python -c "import secrets; print(secrets.token_hex(32))"
 pip install psycopg2-binary ->Postgre
 pip instsll pymysql -> MySql 
 pip install alembic
+pip install pytest
