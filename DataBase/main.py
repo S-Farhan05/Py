@@ -6,7 +6,7 @@ from router import auth , todos ,admin ,users
 
 app =FastAPI()
 
-models.Base.metadata.create_all(bind=Engine)
+# models.Base.metadata.create_all(bind=Engine)
 
 app.include_router(auth.router)
 app.include_router(todos.router)

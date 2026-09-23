@@ -83,6 +83,7 @@ class User_Request(BaseModel):
     last_name:str
     password:str
     role:str
+    phone_number:str
     # is_active
 
 class Token(BaseModel):
@@ -100,7 +101,8 @@ async def create_user(db : db_dependency ,user_request:User_Request):
         last_name=user_request.last_name,
         hashed_password=bcrypt_context.hash(user_request.password),
         role=user_request.role,
-        is_active= True
+        is_active= True,
+        phone_number = user_request.phone_number
         )
     # if user_request_model is None:
     #     raise HTTPException(status_code=500 , detail="Server cant process")

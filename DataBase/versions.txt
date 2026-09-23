@@ -4,4 +4,6 @@ pip install python multiline
 JWT.io
 pip install "python-jose[cryptography]"
 python -c "import secrets; print(secrets.token_hex(32))"
-pip install psycopg2-binary
+pip install psycopg2-binary ->Postgre
+pip instsll pymysql -> MySql 
+pip install alembic
