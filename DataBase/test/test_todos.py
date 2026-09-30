@@ -9,11 +9,11 @@ from fastapi import status
 import pytest
 from models import Todos
 
-SQL_ALCHEMY_DATABASE_URL = 'postgresql://postgres:admin@localhost/TestTodoApplicationDatabase'
+# SQL_ALCHEMY_DATABASE_URL = 'postgresql://postgres:admin@localhost/TestTodoApplicationDatabase'
 
-engine = create_engine(url=SQL_ALCHEMY_DATABASE_URL ,poolclass=QueuePool)
-# SQL_ALCHEMY_DATABASE_URL = 'sqlite:///./testtodoapp.db'
-# engine = create_engine(url=SQL_ALCHEMY_DATABASE_URL,connect_args={'check_same_thread':False} ,poolclass=StaticPool)
+# engine = create_engine(url=SQL_ALCHEMY_DATABASE_URL ,poolclass=QueuePool)
+SQL_ALCHEMY_DATABASE_URL = 'sqlite:///./testtodoapp.db'
+engine = create_engine(url=SQL_ALCHEMY_DATABASE_URL,connect_args={'check_same_thread':False} ,poolclass=StaticPool)
 
 TestSessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine)
 Base.metadata.create_all(bind=engine)
@@ -64,3 +64,20 @@ def test_all_todo(test_user):
                 'is_completed' : True,
                 'owner_id' : 1,
                 'id' : 1}    ]
+
+#odos/{todos_id}
+def test_one_todo(test_user):
+    response = client.get("/todos/1")
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json() =={
+                'title' : 'Creating fake todos',
+                'description' : 'Making a test todos for testing',
+                'priority' : 5,
+                'is_completed' : True,
+                'owner_id' : 1,
+                'id' : 1}  
+
+def test_one_todo_not_found(test_user):
+    response = client.get("/todos/90")
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json() == {'detail' : 'Todo Not found'}
