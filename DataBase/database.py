@@ -11,3 +11,4 @@ SQL_ALCHEMY_DATABASE_URL = 'postgresql://postgres:admin@localhost/TodoApplicatio
 Engine = create_engine(url=SQL_ALCHEMY_DATABASE_URL)
 Base = declarative_base()
 SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=Engine)
+

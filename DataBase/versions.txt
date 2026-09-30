@@ -9,3 +9,4 @@ pip instsll pymysql -> MySql
 pip install alembic
 pip install pytest
 pip install httpx  ->Call https responses 
+pytest --disable-warnings
